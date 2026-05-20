@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import './styles/global.css';
+
+import Landing from './pages/Landing';
+import SessionSetup from './pages/SessionSetup';
+import LiveSession from './pages/LiveSession';
+import PostSession from './pages/PostSession';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/"                   element={<Landing />} />
+        <Route path="/setup/:classroomId" element={<SessionSetup />} />
+        <Route path="/live/:classroomId"  element={<LiveSession />} />
+        <Route path="/summary"            element={<PostSession />} />
+        <Route path="*"                   element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
