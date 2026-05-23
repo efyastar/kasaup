@@ -12,7 +12,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://kasaup.vercel.app",
+        "https://kasaup-mze0x31el-efyastars-projects.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,7 +29,6 @@ class SuggestionRequest(BaseModel):
 @app.post("/suggestions")
 def get_suggestions(body: SuggestionRequest):
     api_key = os.getenv("CLAUDE_API_KEY")
-    print("Using key:", api_key[:10] if api_key else "NO KEY FOUND")
 
     response = requests.post(
         "https://api.anthropic.com/v1/messages",
@@ -38,15 +41,15 @@ def get_suggestions(body: SuggestionRequest):
             "model": "claude-sonnet-4-6",
             "max_tokens": 1000,
             "system": """You are KasaUp, a quiet participation coach for students in seminar discussions.
-            Generate exactly 3 suggestions the student can say right now based on the live conversation.
-            Return ONLY valid JSON, no explanation, no markdown, just the JSON array.
-            Use this exact structure:
-            [
-            { "id": 1, "type": "question", "label": "Question", "text": "..." },
-            { "id": 2, "type": "point", "label": "From reading", "text": "..." },
-            { "id": 3, "type": "pushback", "label": "Push back", "text": "..." }
-            ]
-            Keep each suggestion under 40 words. Sound like a smart student, not an AI.""",
+Generate exactly 3 suggestions the student can say right now based on the live conversation.
+Return ONLY valid JSON, no explanation, no markdown, just the JSON array.
+Use this exact structure:
+[
+  { "id": 1, "type": "question", "label": "Question", "text": "..." },
+  { "id": 2, "type": "point", "label": "From reading", "text": "..." },
+  { "id": 3, "type": "pushback", "label": "Push back", "text": "..." }
+]
+Keep each suggestion under 40 words. Sound like a smart student, not an AI.""",
             "messages": [
                 {
                     "role": "user",
@@ -55,6 +58,12 @@ def get_suggestions(body: SuggestionRequest):
             ]
         }
     )
+
+    data = response.json()
+    print("Claude response:", data)
+    text = data["content"][0]["text"]
+    clean = text.replace("```json", "").replace("```", "").strip()
+    return json.loads(clean)
 
 @app.post("/notes")
 def get_notes(body: SuggestionRequest):
@@ -71,15 +80,15 @@ def get_notes(body: SuggestionRequest):
             "model": "claude-sonnet-4-6",
             "max_tokens": 2000,
             "system": """You are KasaUp. A seminar just ended. Generate structured notes from the transcript.
-            Return ONLY valid JSON with this exact structure, no markdown, no explanation:
-            {
-            "summary": "2-3 sentence overview of the discussion",
-            "concepts": ["concept 1", "concept 2", "concept 3"],
-            "arguments": ["argument 1", "argument 2", "argument 3"],
-            "unresolved": ["question 1", "question 2"],
-            "followUp": [{ "title": "Book or Author", "note": "why relevant" }],
-            "quotes": [{ "text": "quote", "speaker": "speaker name or Classmate" }]
-            }""",
+Return ONLY valid JSON with this exact structure, no markdown, no explanation:
+{
+  "summary": "2-3 sentence overview of the discussion",
+  "concepts": ["concept 1", "concept 2", "concept 3"],
+  "arguments": ["argument 1", "argument 2", "argument 3"],
+  "unresolved": ["question 1", "question 2"],
+  "followUp": [{ "title": "Book or Author", "note": "why relevant" }],
+  "quotes": [{ "text": "quote", "speaker": "speaker name or Classmate" }]
+}""",
             "messages": [
                 {
                     "role": "user",
@@ -90,17 +99,6 @@ def get_notes(body: SuggestionRequest):
     )
 
     data = response.json()
-    text = data["content"][0]["text"]
-    clean = text.replace("```json", "").replace("```", "").strip()
-    return json.loads(clean)
-
-    print("Status code:", response.status_code)
-    data = response.json()
-    print("Claude response:", data)
-
-    if "error" in data:
-        return {"error": data["error"]["message"]}
-
     text = data["content"][0]["text"]
     clean = text.replace("```json", "").replace("```", "").strip()
     return json.loads(clean)

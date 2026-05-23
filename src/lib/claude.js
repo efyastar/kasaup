@@ -1,13 +1,10 @@
+const SERVER_URL = 'https://kasaup-production.up.railway.app';
+
 export async function getSuggestions(transcript, article) {
-  const response = await fetch('http://localhost:8000/suggestions', {
+  const response = await fetch(`${SERVER_URL}/suggestions`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      transcript,
-      article,
-    }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ transcript, article }),
   });
 
   if (!response.ok) {
@@ -18,7 +15,7 @@ export async function getSuggestions(transcript, article) {
 }
 
 export async function getNotes(transcript, article) {
-  const response = await fetch('http://localhost:8000/notes', {
+  const response = await fetch(`${SERVER_URL}/notes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ transcript, article }),
