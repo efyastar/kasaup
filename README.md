@@ -1,70 +1,232 @@
-# Getting Started with Create React App
+# KasaUp
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**KasaUp is an AI-powered seminar participation coach that helps students speak up during live class discussions.**
 
-## Available Scripts
+Many students understand the reading and have thoughtful ideas, but struggle to jump into fast-moving seminar conversations at the right moment. KasaUp listens to the discussion in real time, understands the context of the assigned reading, and suggests smart things the student can say while the conversation is happening.
 
-In the project directory, you can run:
+The goal is simple: help students feel more prepared, confident, and included in discussion-based classes.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## What KasaUp Does
 
-### `npm test`
+KasaUp turns a live seminar into an interactive support system for students.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A student can:
 
-### `npm run build`
+1. Start a class session
+2. Paste in the assigned reading or topic notes
+3. Let KasaUp listen to the live discussion
+4. Receive real-time suggestions for what to say
+5. Mark suggestions as used
+6. End the session and receive organized notes from the discussion
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Instead of being a passive note-taking tool, KasaUp actively helps students participate.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## The Problem It Solves
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Seminar classes often reward students who can think quickly, speak confidently, and find the right opening in a discussion. That can be difficult for students who are shy, anxious, new to the topic, or still forming their ideas.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+KasaUp helps bridge that gap by giving students timely, relevant prompts such as:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- a question they can ask
+- a point from the reading they can bring up
+- a thoughtful counterpoint or pushback
+- a summary of key discussion themes after class
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This makes participation more accessible without replacing the student’s own thinking.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Key Features
 
-### Code Splitting
+### Real-Time Speech Transcription
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+KasaUp uses the browser’s speech recognition capabilities to listen to a live classroom discussion and convert spoken conversation into a running transcript.
 
-### Analyzing the Bundle Size
+Students do not need to type notes manually while trying to follow the discussion.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Live AI Participation Suggestions
 
-### Advanced Configuration
+During the session, KasaUp sends the most recent part of the transcript to an AI backend and returns three concise suggestions the student can say in the moment:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **Question** — something thoughtful to ask the room
+- **From reading** — a point connected to the assigned text
+- **Push back** — a respectful counterargument or challenge
+
+Each suggestion is designed to sound like something a smart student would naturally say, not like an AI-generated script.
+
+
+
+### Reading-Aware Suggestions
+
+Before class, the student can paste in their assigned reading or notes.
+
+KasaUp uses that context when generating suggestions, so the responses are not generic. They are grounded in what the student was actually supposed to read or discuss.
+
+
+
+### Post-Session Notes
+
+When the session ends, KasaUp automatically turns the transcript into structured notes, including:
+
+- a short discussion summary
+- core concepts
+- key arguments
+- unresolved questions
+- useful follow-up ideas
+- important quotes from the discussion
+
+This helps students review what happened after class and prepare for future sessions.
+
+
+
+### Quick Session Mode
+
+KasaUp includes a quick-start flow for students who want to try it immediately without creating an account or saving anything.
+
+This makes the product easy to demo and lowers the barrier for first-time users.
+
+
+
+## How It Works
+
+KasaUp has three main parts:
+
+### 1. Frontend Web App
+
+The frontend is built with **React**.
+
+It handles the student-facing experience:
+
+- landing page
+- session setup
+- live listening interface
+- real-time transcript display
+- AI suggestion cards
+- post-session summary page
+
+The interface is designed around a simple classroom workflow: prepare, listen, participate, review.
+
+
+
+### 2. Backend API
+
+The backend is built with **Python FastAPI**.
+
+It acts as the bridge between the frontend and the AI model. The frontend sends the transcript and optional reading text to the backend, and the backend returns structured AI responses.
+
+The backend currently supports two main actions:
+
+- `/suggestions` — generates live participation suggestions
+- `/notes` — generates structured post-session notes
+
+
+
+### 3. Claude AI Integration
+
+KasaUp uses the Claude API to generate context-aware suggestions and notes.
+
+The AI is prompted to behave like a quiet participation coach for students. It is specifically instructed to produce short, natural suggestions that a student could realistically say during a seminar.
+
+
+
+## User Flow
+
+A typical KasaUp session looks like this:
+
+1. The student opens KasaUp.
+2. They choose a quick session or set up a named class session.
+3. They paste in the assigned reading or topic notes.
+4. They start the live listening session.
+5. KasaUp transcribes the class discussion.
+6. The student can request suggestions or receive them during the session.
+7. The student marks useful suggestions as used.
+8. At the end, KasaUp generates a clean summary of the discussion.
+
+
+
+## Why This Project Matters
+
+KasaUp is built around a real student experience: knowing you have something to contribute, but not knowing exactly when or how to say it.
+
+The product is not just a chatbot. It is a real-time classroom companion that combines speech recognition, AI reasoning, and a focused user experience to support better participation.
+
+It is especially useful for:
+
+- students in discussion-heavy classes
+- students who experience classroom anxiety
+- students preparing for seminars
+- students who want better notes after class
+- educators interested in more inclusive participation
+
+
+
+## Tech Stack
+
+### Frontend
+
+- React
+- React Router
+- CSS
+- Browser Speech Recognition API
+
+### Backend
+
+- Python
+- FastAPI
+- Uvicorn
+- Requests
+- python-dotenv
+
+### AI
+
+- Claude API
 
 ### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Frontend deployed on Vercel
+- Backend deployed on Railway
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## What I Built
+
+For this project, I built a full-stack AI web application that:
+
+- captures live classroom audio through the browser
+- turns speech into a transcript in real time
+- sends transcript context to a Python backend
+- integrates with Claude to generate useful participation prompts
+- creates post-class notes from the full discussion
+- separates frontend and backend deployment
+- provides a polished student-facing interface
+
+This project demonstrates product thinking, frontend development, backend API design, AI integration, and deployment across modern web platforms.
+
+
+
+## Current Status
+
+KasaUp is a working prototype focused on the core student experience:
+
+- live transcription
+- AI-generated participation suggestions
+- reading-aware context
+- session summaries
+- deployed frontend and backend
+
+Future improvements could include user accounts, saved session history, better PDF parsing, instructor dashboards, and support for more browsers.
+
+
+## Live Demo
+
+Frontend: https://kasaup-theta.vercel.app
+
+
+## Repository
+
+GitHub: https://github.com/efyastar/kasaup
