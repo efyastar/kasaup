@@ -12,12 +12,8 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://kasaup.vercel.app",
-        "https://kasaup-mze0x31el-efyastars-projects.vercel.app",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -60,7 +56,6 @@ Keep each suggestion under 40 words. Sound like a smart student, not an AI.""",
     )
 
     data = response.json()
-    print("Claude response:", data)
     text = data["content"][0]["text"]
     clean = text.replace("```json", "").replace("```", "").strip()
     return json.loads(clean)
